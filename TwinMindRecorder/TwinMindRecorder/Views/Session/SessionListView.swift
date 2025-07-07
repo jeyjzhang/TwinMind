@@ -1,10 +1,3 @@
-//
-//  SessionListView.swift
-//  TwinMindRecorder
-//
-//  Created by Jerry Zhang on 2025-07-02.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -16,7 +9,9 @@ struct SessionListView: View {
         NavigationView {
             List {
                 ForEach(sessions) { session in
-                    SessionRowView(session: session)
+                    NavigationLink(destination: SessionDetailView(session: session)) {
+                        SessionRowView(session: session)
+                    }
                 }
                 .onDelete(perform: deleteSessions)
             }

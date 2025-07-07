@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import UIKit
+import Speech
 
 // MARK: - API Models
 struct WhisperRequest {
@@ -32,25 +33,36 @@ struct TranscriptionError: Error, LocalizedError {
 class AudioTranscriptionService: ObservableObject {
     
     // MARK: - Configuration
-    private let apiKey = ""
+    private var apiKey: String {
+        (try? KeychainManager.loadAPIKey()) ?? ""
+    }
     private let baseURL = "https://api.openai.com/v1/audio/transcriptions"
-    private let maxRetries = 5
+    private let maxRetryCount = 2
     private let maxFileSize = 25 * 1024 * 1024 // 25MB
-    private let maxConsecutiveFailures = 5
     
     // MARK: - Processing Queue
     @Published var isProcessing = false
     @Published var queueCount = 0
     private var processingQueue: [AudioSegment] = []
-    private var consecutiveFailures = 0
     
     // MARK: - Dependencies
     private var modelContext: ModelContext?
+    
+    
+    init(){
+        if let loadedKey = try? KeychainManager.loadAPIKey() {
+            print("🔐 Loaded API key from Keychain: \(loadedKey.prefix(6))...")
+        } else {
+            print("🔐 Failed to load API key from Keychain")
+        }
+    }
+
     
     // MARK: - Public Interface
     
     /// Add an audio segment to the transcription queue
     func queueForTranscription(_ segment: AudioSegment, modelContext: ModelContext) {
+        print("📩 Queued segment: \(segment.audioFileURL.lastPathComponent)")
         self.modelContext = modelContext
         
         // Create transcription record if it doesn't exist
@@ -93,6 +105,7 @@ class AudioTranscriptionService: ObservableObject {
     
     /// Transcribe a single audio segment with retry logic
     private func transcribeSegment(_ segment: AudioSegment) async {
+        print("🎙️ Transcribing segment: \(segment.audioFileURL.lastPathComponent)")
         guard let transcription = segment.transcription else {
             print("❌ No transcription record found for segment")
             return
@@ -115,22 +128,21 @@ class AudioTranscriptionService: ObservableObject {
             // Attempt transcription with retry logic
             let transcriptionText = try await transcribeWithRetry(
                 audioData: audioData,
-                audioData: audioData,
                 fileName: segment.audioFileURL.lastPathComponent
             )
             
             // Success - update transcription record
             transcription.markCompleted(text: transcriptionText, confidence: 1.0, processingTime: 0)
-            consecutiveFailures = 0
+            transcription.retryCount = 0
             
             print("✅ Transcribed segment: \(segment.audioFileURL.lastPathComponent)")
             
         } catch {
             // Handle failure
-            consecutiveFailures += 1
+            transcription.retryCount += 1
             
-            if consecutiveFailures >= maxConsecutiveFailures {
-                print("🔄 Switching to local transcription after \(consecutiveFailures) failures")
+            if transcription.retryCount >= maxRetryCount {
+                print("🔄 Switching to local transcription after \(transcription.retryCount) failures")
                 await handleLocalFallback(segment: segment, transcription: transcription)
             } else {
                 transcription.markFailed(error: error.localizedDescription)
@@ -146,7 +158,7 @@ class AudioTranscriptionService: ObservableObject {
     private func transcribeWithRetry(audioData: Data, fileName: String) async throws -> String {
         let request = WhisperRequest(audioData: audioData, fileName: fileName)
         
-        for attempt in 0..<maxRetries {
+        for attempt in 0..<maxRetryCount {
             do {
                 return try await performAPITranscription(request)
             } catch let error as TranscriptionError {
@@ -156,7 +168,7 @@ class AudioTranscriptionService: ObservableObject {
                 }
                 
                 // Don't retry on last attempt
-                if attempt == maxRetries - 1 {
+                if attempt == maxRetryCount - 1 {
                     throw error
                 }
                 
@@ -177,6 +189,8 @@ class AudioTranscriptionService: ObservableObject {
         let boundary = "Boundary-\(UUID().uuidString)"
         let httpBody = createMultipartBody(request: request, boundary: boundary)
         
+        print("📡 Sending request to OpenAI Whisper for \(request.fileName)")
+
         // Build URL request
         guard let url = URL(string: baseURL) else {
             throw TranscriptionError(message: "Invalid URL", isRetryable: false)
@@ -230,7 +244,9 @@ class AudioTranscriptionService: ObservableObject {
             throw TranscriptionError(message: "Bad request - invalid audio file", isRetryable: false)
             
         case 401:
-            throw TranscriptionError.authError
+            let serverMessage = try? String(data: data, encoding: .utf8) ?? "No details"
+            throw TranscriptionError(message: "Authentication failed: \(serverMessage)", isRetryable: false)
+
             
         case 413:
             throw TranscriptionError.fileSizeError
@@ -281,33 +297,115 @@ class AudioTranscriptionService: ObservableObject {
     
     /// Handle local transcription fallback
     private func handleLocalFallback(segment: AudioSegment, transcription: Transcription) async {
+        print("🔄 Starting local fallback for: \(segment.audioFileURL.lastPathComponent)")
+        
         do {
-            // Load audio file for local processing
-            guard let audioData = try? Data(contentsOf: segment.audioFileURL) else {
-                throw TranscriptionError(message: "Could not load audio file for local processing", isRetryable: false)
-            }
+            // Strategy 1: Try direct transcription of WAV file first
+            print("📝 Strategy 1: Direct WAV transcription")
+            let directText = try await AudioConversionService.transcribeDirectly(wavURL: segment.audioFileURL)
             
-            // Attempt local transcription
-            let localText = try await transcribeLocally(audioData: audioData)
-            
-            // Update transcription record
-            transcription.markCompleted(text: localText, confidence: 0.8, processingTime: 0)
-            transcription.transcriptionService = .appleSpeech // Fixed: using correct enum
-            
-            print("✅ Local transcription completed for \(segment.audioFileURL.lastPathComponent)")
+            // Success with direct transcription
+            transcription.markCompleted(text: directText, confidence: 0.9, processingTime: 0)
+            transcription.transcriptionService = .appleSpeech
+            print("✅ Direct WAV transcription succeeded!")
+            return
             
         } catch {
-            transcription.markFailed(error: "Both API and local transcription failed: \(error.localizedDescription)")
-            print("❌ Local transcription also failed for \(segment.audioFileURL.lastPathComponent): \(error.localizedDescription)")
+            print("⚠️ Direct transcription failed: \(error.localizedDescription)")
+            print("📝 Strategy 2: Convert to M4A then transcribe")
+            
+            // Strategy 2: Convert to M4A and then transcribe
+            do {
+                let convertedURL = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("converted_\(UUID().uuidString).m4a")
+                
+                // Use the improved async conversion
+                try await AudioConversionService.convertToM4A(inputURL: segment.audioFileURL, outputURL: convertedURL)
+                
+                // Try transcription on converted file
+                let convertedText = try await transcribeConvertedFile(fileURL: convertedURL)
+                
+                transcription.markCompleted(text: convertedText, confidence: 0.8, processingTime: 0)
+                transcription.transcriptionService = .appleSpeech
+                print("✅ M4A conversion + transcription succeeded!")
+                
+                // Clean up temporary file
+                try? FileManager.default.removeItem(at: convertedURL)
+                
+            } catch {
+                print("❌ Both local strategies failed: \(error.localizedDescription)")
+                transcription.markFailed(error: "All transcription methods failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Transcribe a converted M4A file
+    private func transcribeConvertedFile(fileURL: URL) async throws -> String {
+        let authStatus = await withCheckedContinuation { continuation in
+            SFSpeechRecognizer.requestAuthorization { status in
+                continuation.resume(returning: status) // Send result back to await
+            }
+        }
+        guard await authStatus == .authorized else {
+            throw TranscriptionError(message: "Speech recognition not authorized", isRetryable: false)
+        }
+        
+        guard let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US")),
+              recognizer.isAvailable else {
+            throw TranscriptionError(message: "Speech recognizer unavailable", isRetryable: false)
+        }
+        
+        print("🎙️ Transcribing converted M4A file: \(fileURL.lastPathComponent)")
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            let request = SFSpeechURLRecognitionRequest(url: fileURL)
+            request.shouldReportPartialResults = false
+            
+            recognizer.recognitionTask(with: request) { result, error in
+                if let error = error {
+                    continuation.resume(throwing: TranscriptionError(message: "M4A transcription failed: \(error.localizedDescription)", isRetryable: false))
+                } else if let result = result, result.isFinal {
+                    continuation.resume(returning: result.bestTranscription.formattedString)
+                }
+            }
         }
     }
     
     /// Perform local transcription using iOS Speech Recognition
-    private func transcribeLocally(audioData: Data) async throws -> String {
-        // TODO: Implement iOS Speech Recognition
-        // For now, return placeholder
-        return "[Local transcription - Implementation needed]"
+    private func transcribeLocally(fileURL: URL) async throws -> String {
+        let authStatus = await SFSpeechRecognizer.authorizationStatus()
+        if authStatus != .authorized {
+            print("🛑 Speech recognition not authorized: \(authStatus.rawValue)")
+            throw TranscriptionError(message: "Speech recognition not authorized", isRetryable: false)
+        }
+
+        // Print format details
+        print("🧾 Final file format:")
+        let asset = AVAsset(url: fileURL)
+        print("⏱️ Segment duration: \(CMTimeGetSeconds(asset.duration)) seconds")
+        for track in asset.tracks {
+            print("🎛 Track: \(track.mediaType), \(track.naturalTimeScale) Hz, \(track.formatDescriptions)")
+        }
+
+        return try await withCheckedThrowingContinuation { continuation in
+            let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+
+            guard let recognizer = recognizer, recognizer.isAvailable else {
+                return continuation.resume(throwing: TranscriptionError(message: "Local recognizer unavailable", isRetryable: false))
+            }
+
+            let request = SFSpeechURLRecognitionRequest(url: fileURL)
+
+            recognizer.recognitionTask(with: request) { result, error in
+                if let error = error {
+                    continuation.resume(throwing: TranscriptionError(message: "Local transcription failed: \(error.localizedDescription)", isRetryable: false))
+                } else if let result = result, result.isFinal {
+                    continuation.resume(returning: result.bestTranscription.formattedString)
+                }
+            }
+        }
     }
+
     
     /// Save changes to SwiftData context
     private func saveContext() {
@@ -322,13 +420,5 @@ class AudioTranscriptionService: ObservableObject {
     
     // MARK: - Public Utility Methods
     
-    /// Reset consecutive failure count (call when network conditions improve)
-    func resetFailureCount() {
-        consecutiveFailures = 0
-    }
     
-    /// Check if service is in local fallback mode
-    var isInLocalFallbackMode: Bool {
-        return consecutiveFailures >= maxConsecutiveFailures
-    }
 }
