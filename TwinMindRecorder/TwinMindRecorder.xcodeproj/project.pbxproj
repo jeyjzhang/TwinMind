@@ -1,0 +1,721 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		542D11A42E1A186F0077E312 /* SegmentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542D11A32E1A186F0077E312 /* SegmentRowView.swift */; };
+		542D11A62E1A2BE60077E312 /* AudioConversionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542D11A52E1A2BE60077E312 /* AudioConversionService.swift */; };
+		542D11A82E1A55CC0077E312 /* AudioFileDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542D11A72E1A55CC0077E312 /* AudioFileDebugger.swift */; };
+		542D11AA2E1B51A10077E312 /* OfflineQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542D11A92E1B51A10077E312 /* OfflineQueueManager.swift */; };
+		545445632E15FA75003ACCE5 /* TwinMindRecorderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445622E15FA75003ACCE5 /* TwinMindRecorderApp.swift */; };
+		545445652E15FA75003ACCE5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445642E15FA75003ACCE5 /* ContentView.swift */; };
+		545445672E15FA75003ACCE5 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445662E15FA75003ACCE5 /* Item.swift */; };
+		545445692E15FA77003ACCE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 545445682E15FA77003ACCE5 /* Assets.xcassets */; };
+		5454456C2E15FA77003ACCE5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5454456B2E15FA77003ACCE5 /* Preview Assets.xcassets */; };
+		545445762E15FA78003ACCE5 /* TwinMindRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445752E15FA78003ACCE5 /* TwinMindRecorderTests.swift */; };
+		545445802E15FA78003ACCE5 /* TwinMindRecorderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5454457F2E15FA78003ACCE5 /* TwinMindRecorderUITests.swift */; };
+		545445822E15FA78003ACCE5 /* TwinMindRecorderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445812E15FA78003ACCE5 /* TwinMindRecorderUITestsLaunchTests.swift */; };
+		545445922E15FEB7003ACCE5 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445912E15FEB7003ACCE5 /* Enums.swift */; };
+		545445942E15FF47003ACCE5 /* RecordingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445932E15FF47003ACCE5 /* RecordingSession.swift */; };
+		545445962E160029003ACCE5 /* AudioSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445952E160029003ACCE5 /* AudioSegment.swift */; };
+		545445982E160209003ACCE5 /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445972E160209003ACCE5 /* Transcription.swift */; };
+		5454459D2E160664003ACCE5 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5454459C2E160664003ACCE5 /* RecordingView.swift */; };
+		5454459F2E16068C003ACCE5 /* SessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5454459E2E16068C003ACCE5 /* SessionListView.swift */; };
+		545445A22E160930003ACCE5 /* RecordingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445A12E160930003ACCE5 /* RecordingViewModel.swift */; };
+		545445A52E166B88003ACCE5 /* AudioTranscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445A42E166B88003ACCE5 /* AudioTranscriptionService.swift */; };
+		545445A72E177358003ACCE5 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445A62E177358003ACCE5 /* KeychainManager.swift */; };
+		545445AA2E1780A7003ACCE5 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545445A92E1780A7003ACCE5 /* SessionDetailView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		545445722E15FA78003ACCE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 545445572E15FA75003ACCE5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5454455E2E15FA75003ACCE5;
+			remoteInfo = TwinMindRecorder;
+		};
+		5454457C2E15FA78003ACCE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 545445572E15FA75003ACCE5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5454455E2E15FA75003ACCE5;
+			remoteInfo = TwinMindRecorder;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		542D11A32E1A186F0077E312 /* SegmentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentRowView.swift; sourceTree = "<group>"; };
+		542D11A52E1A2BE60077E312 /* AudioConversionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConversionService.swift; sourceTree = "<group>"; };
+		542D11A72E1A55CC0077E312 /* AudioFileDebugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileDebugger.swift; sourceTree = "<group>"; };
+		542D11A92E1B51A10077E312 /* OfflineQueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineQueueManager.swift; sourceTree = "<group>"; };
+		5454455F2E15FA75003ACCE5 /* TwinMindRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinMindRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		545445622E15FA75003ACCE5 /* TwinMindRecorderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwinMindRecorderApp.swift; sourceTree = "<group>"; };
+		545445642E15FA75003ACCE5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		545445662E15FA75003ACCE5 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		545445682E15FA77003ACCE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5454456B2E15FA77003ACCE5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		545445712E15FA78003ACCE5 /* TwinMindRecorderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwinMindRecorderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		545445752E15FA78003ACCE5 /* TwinMindRecorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwinMindRecorderTests.swift; sourceTree = "<group>"; };
+		5454457B2E15FA78003ACCE5 /* TwinMindRecorderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwinMindRecorderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5454457F2E15FA78003ACCE5 /* TwinMindRecorderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwinMindRecorderUITests.swift; sourceTree = "<group>"; };
+		545445812E15FA78003ACCE5 /* TwinMindRecorderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwinMindRecorderUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		545445912E15FEB7003ACCE5 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		545445932E15FF47003ACCE5 /* RecordingSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSession.swift; sourceTree = "<group>"; };
+		545445952E160029003ACCE5 /* AudioSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSegment.swift; sourceTree = "<group>"; };
+		545445972E160209003ACCE5 /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
+		5454459C2E160664003ACCE5 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		5454459E2E16068C003ACCE5 /* SessionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListView.swift; sourceTree = "<group>"; };
+		545445A12E160930003ACCE5 /* RecordingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewModel.swift; sourceTree = "<group>"; };
+		545445A32E165E6A003ACCE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		545445A42E166B88003ACCE5 /* AudioTranscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTranscriptionService.swift; sourceTree = "<group>"; };
+		545445A62E177358003ACCE5 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		545445A82E1774AA003ACCE5 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		545445A92E1780A7003ACCE5 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5454455C2E15FA75003ACCE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5454456E2E15FA78003ACCE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		545445782E15FA78003ACCE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		545445562E15FA75003ACCE5 = {
+			isa = PBXGroup;
+			children = (
+				545445612E15FA75003ACCE5 /* TwinMindRecorder */,
+				545445742E15FA78003ACCE5 /* TwinMindRecorderTests */,
+				5454457E2E15FA78003ACCE5 /* TwinMindRecorderUITests */,
+				545445602E15FA75003ACCE5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		545445602E15FA75003ACCE5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5454455F2E15FA75003ACCE5 /* TwinMindRecorder.app */,
+				545445712E15FA78003ACCE5 /* TwinMindRecorderTests.xctest */,
+				5454457B2E15FA78003ACCE5 /* TwinMindRecorderUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		545445612E15FA75003ACCE5 /* TwinMindRecorder */ = {
+			isa = PBXGroup;
+			children = (
+				545445A32E165E6A003ACCE5 /* Info.plist */,
+				545445A02E160925003ACCE5 /* Services */,
+				545445992E16063D003ACCE5 /* Views */,
+				5454458E2E15FE73003ACCE5 /* Models */,
+				545445622E15FA75003ACCE5 /* TwinMindRecorderApp.swift */,
+				545445642E15FA75003ACCE5 /* ContentView.swift */,
+				545445662E15FA75003ACCE5 /* Item.swift */,
+				545445682E15FA77003ACCE5 /* Assets.xcassets */,
+				5454456A2E15FA77003ACCE5 /* Preview Content */,
+				545445A62E177358003ACCE5 /* KeychainManager.swift */,
+				545445A82E1774AA003ACCE5 /* Secrets.xcconfig */,
+				542D11A72E1A55CC0077E312 /* AudioFileDebugger.swift */,
+			);
+			path = TwinMindRecorder;
+			sourceTree = "<group>";
+		};
+		5454456A2E15FA77003ACCE5 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				5454456B2E15FA77003ACCE5 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		545445742E15FA78003ACCE5 /* TwinMindRecorderTests */ = {
+			isa = PBXGroup;
+			children = (
+				545445752E15FA78003ACCE5 /* TwinMindRecorderTests.swift */,
+			);
+			path = TwinMindRecorderTests;
+			sourceTree = "<group>";
+		};
+		5454457E2E15FA78003ACCE5 /* TwinMindRecorderUITests */ = {
+			isa = PBXGroup;
+			children = (
+				5454457F2E15FA78003ACCE5 /* TwinMindRecorderUITests.swift */,
+				545445812E15FA78003ACCE5 /* TwinMindRecorderUITestsLaunchTests.swift */,
+			);
+			path = TwinMindRecorderUITests;
+			sourceTree = "<group>";
+		};
+		5454458E2E15FE73003ACCE5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				545445902E15FE90003ACCE5 /* API */,
+				5454458F2E15FE83003ACCE5 /* SwiftData */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5454458F2E15FE83003ACCE5 /* SwiftData */ = {
+			isa = PBXGroup;
+			children = (
+				545445912E15FEB7003ACCE5 /* Enums.swift */,
+				545445932E15FF47003ACCE5 /* RecordingSession.swift */,
+				545445952E160029003ACCE5 /* AudioSegment.swift */,
+				545445972E160209003ACCE5 /* Transcription.swift */,
+			);
+			path = SwiftData;
+			sourceTree = "<group>";
+		};
+		545445902E15FE90003ACCE5 /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		545445992E16063D003ACCE5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5454459B2E16064E003ACCE5 /* Session */,
+				5454459A2E160649003ACCE5 /* Recording */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5454459A2E160649003ACCE5 /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				5454459C2E160664003ACCE5 /* RecordingView.swift */,
+			);
+			path = Recording;
+			sourceTree = "<group>";
+		};
+		5454459B2E16064E003ACCE5 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				5454459E2E16068C003ACCE5 /* SessionListView.swift */,
+				545445A92E1780A7003ACCE5 /* SessionDetailView.swift */,
+				542D11A32E1A186F0077E312 /* SegmentRowView.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		545445A02E160925003ACCE5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				545445A12E160930003ACCE5 /* RecordingViewModel.swift */,
+				545445A42E166B88003ACCE5 /* AudioTranscriptionService.swift */,
+				542D11A52E1A2BE60077E312 /* AudioConversionService.swift */,
+				542D11A92E1B51A10077E312 /* OfflineQueueManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5454455E2E15FA75003ACCE5 /* TwinMindRecorder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 545445852E15FA78003ACCE5 /* Build configuration list for PBXNativeTarget "TwinMindRecorder" */;
+			buildPhases = (
+				5454455B2E15FA75003ACCE5 /* Sources */,
+				5454455C2E15FA75003ACCE5 /* Frameworks */,
+				5454455D2E15FA75003ACCE5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TwinMindRecorder;
+			productName = TwinMindRecorder;
+			productReference = 5454455F2E15FA75003ACCE5 /* TwinMindRecorder.app */;
+			productType = "com.apple.product-type.application";
+		};
+		545445702E15FA78003ACCE5 /* TwinMindRecorderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 545445882E15FA78003ACCE5 /* Build configuration list for PBXNativeTarget "TwinMindRecorderTests" */;
+			buildPhases = (
+				5454456D2E15FA78003ACCE5 /* Sources */,
+				5454456E2E15FA78003ACCE5 /* Frameworks */,
+				5454456F2E15FA78003ACCE5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				545445732E15FA78003ACCE5 /* PBXTargetDependency */,
+			);
+			name = TwinMindRecorderTests;
+			productName = TwinMindRecorderTests;
+			productReference = 545445712E15FA78003ACCE5 /* TwinMindRecorderTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5454457A2E15FA78003ACCE5 /* TwinMindRecorderUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5454458B2E15FA78003ACCE5 /* Build configuration list for PBXNativeTarget "TwinMindRecorderUITests" */;
+			buildPhases = (
+				545445772E15FA78003ACCE5 /* Sources */,
+				545445782E15FA78003ACCE5 /* Frameworks */,
+				545445792E15FA78003ACCE5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5454457D2E15FA78003ACCE5 /* PBXTargetDependency */,
+			);
+			name = TwinMindRecorderUITests;
+			productName = TwinMindRecorderUITests;
+			productReference = 5454457B2E15FA78003ACCE5 /* TwinMindRecorderUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		545445572E15FA75003ACCE5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					5454455E2E15FA75003ACCE5 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					545445702E15FA78003ACCE5 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 5454455E2E15FA75003ACCE5;
+					};
+					5454457A2E15FA78003ACCE5 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 5454455E2E15FA75003ACCE5;
+					};
+				};
+			};
+			buildConfigurationList = 5454455A2E15FA75003ACCE5 /* Build configuration list for PBXProject "TwinMindRecorder" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 545445562E15FA75003ACCE5;
+			productRefGroup = 545445602E15FA75003ACCE5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5454455E2E15FA75003ACCE5 /* TwinMindRecorder */,
+				545445702E15FA78003ACCE5 /* TwinMindRecorderTests */,
+				5454457A2E15FA78003ACCE5 /* TwinMindRecorderUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5454455D2E15FA75003ACCE5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5454456C2E15FA77003ACCE5 /* Preview Assets.xcassets in Resources */,
+				545445692E15FA77003ACCE5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5454456F2E15FA78003ACCE5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		545445792E15FA78003ACCE5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5454455B2E15FA75003ACCE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				545445A22E160930003ACCE5 /* RecordingViewModel.swift in Sources */,
+				545445962E160029003ACCE5 /* AudioSegment.swift in Sources */,
+				545445A52E166B88003ACCE5 /* AudioTranscriptionService.swift in Sources */,
+				542D11A42E1A186F0077E312 /* SegmentRowView.swift in Sources */,
+				542D11AA2E1B51A10077E312 /* OfflineQueueManager.swift in Sources */,
+				545445652E15FA75003ACCE5 /* ContentView.swift in Sources */,
+				545445672E15FA75003ACCE5 /* Item.swift in Sources */,
+				542D11A62E1A2BE60077E312 /* AudioConversionService.swift in Sources */,
+				545445922E15FEB7003ACCE5 /* Enums.swift in Sources */,
+				545445942E15FF47003ACCE5 /* RecordingSession.swift in Sources */,
+				542D11A82E1A55CC0077E312 /* AudioFileDebugger.swift in Sources */,
+				545445A72E177358003ACCE5 /* KeychainManager.swift in Sources */,
+				545445982E160209003ACCE5 /* Transcription.swift in Sources */,
+				5454459D2E160664003ACCE5 /* RecordingView.swift in Sources */,
+				5454459F2E16068C003ACCE5 /* SessionListView.swift in Sources */,
+				545445AA2E1780A7003ACCE5 /* SessionDetailView.swift in Sources */,
+				545445632E15FA75003ACCE5 /* TwinMindRecorderApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5454456D2E15FA78003ACCE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				545445762E15FA78003ACCE5 /* TwinMindRecorderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		545445772E15FA78003ACCE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				545445822E15FA78003ACCE5 /* TwinMindRecorderUITestsLaunchTests.swift in Sources */,
+				545445802E15FA78003ACCE5 /* TwinMindRecorderUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		545445732E15FA78003ACCE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5454455E2E15FA75003ACCE5 /* TwinMindRecorder */;
+			targetProxy = 545445722E15FA78003ACCE5 /* PBXContainerItemProxy */;
+		};
+		5454457D2E15FA78003ACCE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5454455E2E15FA75003ACCE5 /* TwinMindRecorder */;
+			targetProxy = 5454457C2E15FA78003ACCE5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		545445832E15FA78003ACCE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 545445A82E1774AA003ACCE5 /* Secrets.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		545445842E15FA78003ACCE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		545445862E15FA78003ACCE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TwinMindRecorder/Preview Content\"";
+				DEVELOPMENT_TEAM = L7C242K3NV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TwinMindRecorder/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs microphone access to record audio for transcription.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jerry.audiotest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		545445872E15FA78003ACCE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 545445A82E1774AA003ACCE5 /* Secrets.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TwinMindRecorder/Preview Content\"";
+				DEVELOPMENT_TEAM = L7C242K3NV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TwinMindRecorder/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs microphone access to record audio for transcription.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jerry.audiotest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		545445892E15FA78003ACCE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L7C242K3NV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = usc.TwinMindRecorderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwinMindRecorder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TwinMindRecorder";
+			};
+			name = Debug;
+		};
+		5454458A2E15FA78003ACCE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 545445A82E1774AA003ACCE5 /* Secrets.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L7C242K3NV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = usc.TwinMindRecorderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwinMindRecorder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TwinMindRecorder";
+			};
+			name = Release;
+		};
+		5454458C2E15FA78003ACCE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L7C242K3NV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = usc.TwinMindRecorderUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TwinMindRecorder;
+			};
+			name = Debug;
+		};
+		5454458D2E15FA78003ACCE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 545445A82E1774AA003ACCE5 /* Secrets.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L7C242K3NV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = usc.TwinMindRecorderUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TwinMindRecorder;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5454455A2E15FA75003ACCE5 /* Build configuration list for PBXProject "TwinMindRecorder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				545445832E15FA78003ACCE5 /* Debug */,
+				545445842E15FA78003ACCE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		545445852E15FA78003ACCE5 /* Build configuration list for PBXNativeTarget "TwinMindRecorder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				545445862E15FA78003ACCE5 /* Debug */,
+				545445872E15FA78003ACCE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		545445882E15FA78003ACCE5 /* Build configuration list for PBXNativeTarget "TwinMindRecorderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				545445892E15FA78003ACCE5 /* Debug */,
+				5454458A2E15FA78003ACCE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5454458B2E15FA78003ACCE5 /* Build configuration list for PBXNativeTarget "TwinMindRecorderUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5454458C2E15FA78003ACCE5 /* Debug */,
+				5454458D2E15FA78003ACCE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 545445572E15FA75003ACCE5 /* Project object */;
+}

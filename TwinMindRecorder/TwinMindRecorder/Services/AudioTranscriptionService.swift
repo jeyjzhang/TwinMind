@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import UIKit
 import Speech
+import Network
 
 // MARK: - API Models
 struct WhisperRequest {
@@ -37,16 +38,20 @@ class AudioTranscriptionService: ObservableObject {
         (try? KeychainManager.loadAPIKey()) ?? ""
     }
     private let baseURL = "https://api.openai.com/v1/audio/transcriptions"
-    private let maxRetryCount = 2
+    private let maxRetryCount = 5
     private let maxFileSize = 25 * 1024 * 1024 // 25MB
     
     // MARK: - Processing Queue
     @Published var isProcessing = false
     @Published var queueCount = 0
     private var processingQueue: [AudioSegment] = []
+    private let monitor = NWPathMonitor()
     
     // MARK: - Dependencies
     private var modelContext: ModelContext?
+    
+    @Published var isOnline: Bool = true
+
     
     
     init(){
@@ -84,6 +89,42 @@ class AudioTranscriptionService: ObservableObject {
         }
     }
     
+    func startNetworkMonitor(sessions: [RecordingSession]) {
+        monitor.pathUpdateHandler = { [weak self] path in
+            DispatchQueue.main.async {
+                let nowOnline = path.status == .satisfied
+                self?.isOnline = nowOnline
+                print("📡 Network status: \(nowOnline ? "Online" : "Offline")")
+
+                if nowOnline {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        print("📶 Debounced network reconnect, attempting retry...")
+                        self?.retryPendingSegments(from: sessions)
+                    }
+                }
+            }
+        }
+
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    @MainActor
+    func retryOfflineSegments(from sessions: [RecordingSession]) async {
+        let ids = await OfflineQueueManager.shared.all()
+        
+        for id in ids {
+            for session in sessions {
+                if let segment = session.segments.first(where: { $0.audioFilePath == id }) {
+                    print("🌐 Requeuing offline segment: \(id)")
+                    queueForTranscription(segment, modelContext: modelContext!)
+                    await OfflineQueueManager.shared.remove(id)
+                }
+            }
+        }
+    }
+
+
     /// Process all queued transcriptions
     private func processQueue() async {
         isProcessing = true
@@ -207,11 +248,21 @@ class AudioTranscriptionService: ObservableObject {
         let (data, response) = try await performBackgroundRequest(urlRequest)
         
         // Handle response
-        guard let httpResponse = response as? HTTPURLResponse else {
+        do {
+            let (data, response) = try await performBackgroundRequest(urlRequest)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw TranscriptionError.networkError
+            }
+
+            return try handleAPIResponse(data: data, statusCode: httpResponse.statusCode)
+
+        } catch let error as URLError where error.code == .notConnectedToInternet {
+            print("🚫 No internet. Queuing segment for later retry")
+            await OfflineQueueManager.shared.add(request.fileName)
             throw TranscriptionError.networkError
         }
-        
-        return try handleAPIResponse(data: data, statusCode: httpResponse.statusCode)
+
     }
     
     /// Perform network request with background task support
@@ -418,7 +469,36 @@ class AudioTranscriptionService: ObservableObject {
         }
     }
     
-    // MARK: - Public Utility Methods
+    @MainActor
+    func setModelContext(_ context: ModelContext) {
+        self.modelContext = context
+    }
+
     
+    @MainActor
+    func retryPendingSegments(from sessions: [RecordingSession]) {
+        print("💥 retryPendingSegments called with \(sessions.count) sessions")
+
+        guard let context = modelContext else {
+            print("❌ retryPendingSegments aborted — modelContext is nil")
+            return
+        }
+        
+        for session in sessions {
+            for segment in session.segments {
+                guard let transcription = segment.transcription else { continue }
+
+                if transcription.status == .queued || (transcription.status == .failed && transcription.canRetry) {
+                    print("🔁 Auto-retrying segment: \(segment.audioFilePath)")
+                    guard let context = modelContext else {
+                        print("❌ Cannot retry segment, modelContext is nil")
+                        continue
+                    }
+                    queueForTranscription(segment, modelContext: context)
+                }
+            }
+        }
+    }
+
     
 }

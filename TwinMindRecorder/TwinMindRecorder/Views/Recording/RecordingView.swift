@@ -33,6 +33,7 @@ struct RecordingView: View {
                 Text(viewModel.isRecording ? "Recording..." : "Ready to Record")
                     .font(.title2)
                     .foregroundColor(viewModel.isRecording ? .red : .primary)
+                    .accessibilityLabel(viewModel.isRecording ? "Recording in progress" : "Ready to record")
                 
                 if viewModel.isRecording {
                     Text(formatDuration(viewModel.recordingDuration))
@@ -90,13 +91,15 @@ struct RecordingView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
-                    Picker("Segment Duration", selection: $viewModel.segmentDuration) {
-                        Text("15 sec").tag(15.0)
-                        Text("30 sec").tag(30.0)
-                        Text("60 sec").tag(60.0)
+                    Section(header: Text("Segment Duration")) {
+                        Picker("Segment Duration", selection: $viewModel.segmentDuration) {
+                            ForEach([15.0, 30.0, 60.0, 120.0], id: \.self) { duration in
+                                Text("\(Int(duration)) seconds")
+                            }
+                        }
+                        .pickerStyle(.segmented)
                     }
-                    .pickerStyle(.segmented)
-                    .padding(.bottom, 12)
+
 
 
                     Button("Start Recording") {

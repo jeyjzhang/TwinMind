@@ -40,6 +40,7 @@ struct TwinMindRecorderApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(AudioTranscriptionService())
+            
         }
         .modelContainer(sharedModelContainer)
     }
