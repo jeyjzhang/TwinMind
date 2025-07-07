@@ -70,7 +70,7 @@ struct AudioConversionService {
             SFSpeechRecognizer.requestAuthorization { status in
                 continuation.resume(returning: status) // Send result back to await
             }
-        }
+        }        
         guard await authStatus == .authorized else {
             throw ConversionError.speechNotAuthorized
         }
@@ -112,7 +112,7 @@ struct AudioConversionService {
         }
         
         // For now, always try direct transcription first
-        return false
+        return true
     }
     
     private static func printAssetInfo(_ asset: AVAsset) async {

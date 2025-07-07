@@ -24,6 +24,8 @@ class RecordingViewModel: ObservableObject {
     @Published var hasLowStorage = false
     private var selectedQuality: AudioQuality = .medium
 
+    @Published var audioEngineWasHealthy = true
+
     
     // MARK: - Audio Engine Components
     private var audioEngine = AVAudioEngine()
@@ -140,6 +142,8 @@ extension RecordingViewModel {
             // Setup audio engine for recording
             try setupAudioEngine()
             
+            audioEngine.prepare()
+            
             // Start the audio engine
             try audioEngine.start()
             
@@ -172,6 +176,10 @@ extension RecordingViewModel {
         
         // Finalize current segment
         finalizeCurrentSegment()
+        audioFile = nil
+        
+        Thread.sleep(forTimeInterval: 0.2)
+
         
         // Complete the session
         currentSession?.completeSession()
@@ -190,14 +198,8 @@ extension RecordingViewModel {
     /// Setup AVAudioEngine for recording with real-time processing
     private func setupAudioEngine() throws {
         let inputNode = audioEngine.inputNode
-        let fileSettings: [String: Any] = [
-            AVFormatIDKey: kAudioFormatLinearPCM,
-            AVSampleRateKey: 44100.0,
-            AVNumberOfChannelsKey: 1,
-            AVLinearPCMBitDepthKey: 16,
-            AVLinearPCMIsFloatKey: false,
-            AVLinearPCMIsBigEndianKey: false
-        ]
+        let inputFormat = audioEngine.inputNode.inputFormat(forBus: 0)
+        let settings = inputFormat.settings
 
 
         //print("🎛 Mic format: \(recordingFormat.sampleRate) Hz, \(recordingFormat.channelCount) channels")
@@ -207,9 +209,9 @@ extension RecordingViewModel {
         let segmentURL = createSegmentFileURL()
         
         // Create audio file for writing
-        audioFile = try AVAudioFile(forWriting: segmentURL, settings: fileSettings)
+        audioFile = try AVAudioFile(forWriting: segmentURL, settings: settings)
 
-        let tapFormat = inputNode.outputFormat(forBus: 0)
+        let tapFormat = inputNode.inputFormat(forBus: 0)
 
         // Install tap for real-time audio processing
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: tapFormat) { [weak self] buffer, time in
@@ -221,11 +223,17 @@ extension RecordingViewModel {
     
     /// Create unique file URL for audio segment
     private func createSegmentFileURL() -> URL {
-        let documentsPath = FileManager.default.urls(for: .documentDirectory,
-                                                   in: .userDomainMask).first!
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let fileName = "segment_\(UUID().uuidString).wav"
-        return documentsPath.appendingPathComponent(fileName)
+        let url = documentsPath.appendingPathComponent(fileName)
+
+        // Encrypt at rest with iOS file protection
+        let attributes: [FileAttributeKey: Any] = [.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication]
+        try? FileManager.default.setAttributes(attributes, ofItemAtPath: url.path)
+
+        return url
     }
+
     
     /// Update audio level for real-time visualization
     private func updateAudioLevel(from buffer: AVAudioPCMBuffer) {
@@ -281,6 +289,16 @@ extension RecordingViewModel {
     
     // In createNewSegment method, add logging:
     private func createNewSegment() {
+        guard isRecording && audioEngine.isRunning else {
+            print("⏸ Skipping segment — recording is paused or engine not running")
+            return
+        }
+        guard isRecording, audioEngine.isRunning, audioEngineWasHealthy else {
+            print("⏸ Skipping segment — engine state unhealthy")
+            return
+        }
+
+
         print("🔥 createNewSegment called at \(recordingDuration)s")
         
         // Finalize current segment
@@ -325,6 +343,11 @@ extension RecordingViewModel {
     
     /// Finalize the current audio segment and save to database
     private func finalizeCurrentSegment() {
+        guard let file = audioFile, file.length > 0 else {
+            print("⛔️ Skipping segment finalization — no audio written")
+            return
+        }
+
         guard let audioFile = audioFile,
               let session = currentSession,
               let modelContext = modelContext else { return }
@@ -351,11 +374,34 @@ extension RecordingViewModel {
         modelContext.insert(segment)
         modelContext.insert(transcription)
         
+        // After modelContext.insert(transcription)
+        let asset = AVAsset(url: segment.audioFileURL)
+        print("🧾 Segment asset duration: \(CMTimeGetSeconds(asset.duration))s")
+
+        do {
+            let attrs = try FileManager.default.attributesOfItem(atPath: segment.audioFileURL.path)
+            print("📄 Segment file size: \(attrs[.size] ?? 0) bytes")
+        } catch {
+            print("❌ Failed to get file attributes: \(error)")
+        }
+
+        
         transcriptionService.queueForTranscription(segment, modelContext: modelContext)
 
         print("Created segment: \(fileName)")
         
-        
+        Task {
+            let m4aURL = FileManager.default
+                .urls(for: .documentDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent(fileName.replacingOccurrences(of: ".wav", with: ".m4a"))
+
+            do {
+                try await AudioConversionService.convertToM4A(inputURL: segment.audioFileURL, outputURL: m4aURL)
+                print("🎵 M4A exported: \(m4aURL.lastPathComponent)")
+            } catch {
+                print("❌ M4A conversion failed: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
@@ -378,6 +424,7 @@ extension RecordingViewModel {
             name: AVAudioSession.interruptionNotification,
             object: nil
         )
+        
 
     }
     
@@ -387,20 +434,34 @@ extension RecordingViewModel {
               let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
             return
         }
-        
+        print("🎧 Audio route changed — reason: \(reason)")
+
         switch reason {
-        case .oldDeviceUnavailable:
-            print("🎧 Headphones unplugged or Bluetooth disconnected")
-            if isRecording {
-                audioEngine.pause()
-                try? audioEngine.start()  // Try to resume
-                print("✅ Audio engine restarted after route change")
-            }
+        case .oldDeviceUnavailable, .newDeviceAvailable, .categoryChange:
             
+            if isRecording {
+                print("🔄 Rebuilding audio engine due to route change")
+
+                // Stop engine and tap
+                audioEngine.stop()
+                audioEngine.reset()
+                audioEngine.inputNode.removeTap(onBus: 0)
+                
+                do {
+                    try setupAudioEngine()
+                    audioEngine.prepare()
+                    try audioEngine.start()
+                    print("✅ Audio engine restarted after route change")
+                } catch {
+                    print("❌ Failed to restart audio engine: \(error)")
+                }
+            }
+
         default:
             break
         }
     }
+
 
     
     @objc private func handleAudioInterruption(_ notification: Notification) {
@@ -429,6 +490,10 @@ extension RecordingViewModel {
     }
     
     private func handleInterruptionBegan() {
+        segmentTimer?.invalidate()
+        segmentTimer = nil
+        print("⏸ Segment timer paused due to interruption")
+
         print("🎵 Audio interruption began (call, Siri, etc.)")
         
         if isRecording {
@@ -443,15 +508,20 @@ extension RecordingViewModel {
         
         if isRecording && shouldResume {
             do {
-                // Try to resume
+                audioEngine.inputNode.removeTap(onBus: 0)
+                try setupAudioEngine()
+                audioEngine.prepare()
                 try audioEngine.start()
-                print("🎵 Recording resumed")
-                
+                print("🎵 Recording resumed with new audio tap")
             } catch {
-                print("🎵 Failed to resume: \(error)")
-                // If resume fails, just continue - don't crash
+                print("🎵 Failed to resume audio engine: \(error)")
             }
         }
+        if shouldResume {
+            startTimers()
+            print("▶️ Segment timer resumed")
+        }
+
     }
     @objc private func handleAppWillResignActive() {
         print("📱 App moving to background")

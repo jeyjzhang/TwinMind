@@ -23,6 +23,8 @@ struct SegmentRowView: View {
             Text("Segment @ \(formatTime(segment.startTime))")
                 .font(.subheadline)
                 .bold()
+                .accessibilityLabel("Segment at \(formatTime(segment.startTime))")
+
 
             switch segment.transcription?.status {
             case .completed:
@@ -68,15 +70,17 @@ struct SegmentRowView: View {
             }
 
             // 🔊 Export button for debugging
-            Button("Export .wav") {
+            Button("Export .m4a") {
                 showingShareSheet = true
             }
             .font(.caption2)
+            .accessibilityLabel("Export original audio file")
 
         }
         .padding(.vertical, 4)
         .sheet(isPresented: $showingShareSheet) {
-            ActivityView(fileURL: segment.audioFileURL)
+            let m4aURL = segment.audioFileURL.deletingPathExtension().appendingPathExtension("m4a")
+            ActivityView(fileURL: FileManager.default.fileExists(atPath: m4aURL.path) ? m4aURL : segment.audioFileURL)
         }
     }
 
