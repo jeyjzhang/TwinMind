@@ -24,10 +24,22 @@ struct TwinMindRecorderApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    init() {
+        let buildKey = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String
+        print("🧪 Build-time API key: \(buildKey ?? "nil")")
+
+        if let key = buildKey {
+            try? KeychainManager.saveAPIKey(key)
+        }
+    }
+
+
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(AudioTranscriptionService())
         }
         .modelContainer(sharedModelContainer)
     }
